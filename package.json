@@ -1,0 +1,40 @@
+{
+  "name": "Samet Portfolio",
+  "author": "Samet Yildiz",
+  "description": "Portfolio",
+  "type": "module",
+  "license": "MIT",
+  "version": "1.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.3",
+    "@astrojs/sitemap": "^3.1.6",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.15.2",
+    "astro-font": "^0.1.81",
+    "tailwindcss": "^3.4.13"
+  },
+  "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.6",
+    "typescript": "^5.6.2"
+  },
+  "lint-staged": {
+    "*": "pnpm run format"
+  },
+  "engines": {
+    "pnpm": "9.x"
+  },
+  "packageManager": "pnpm@9.2.0"
+}

@@ -1,0 +1,19 @@
+---
+import Avatar from '../components/Avatar.astro';
+import Details from '../components/Details.astro';
+import Socials from '../components/Socials.astro';
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * Replace the values below with your own information
+ */
+const title = "Samet Yildiz";
+const siteName = 'Samet Yildiz';
+const siteDescription = "Samet's Portfolio";
+---
+
+<Layout title={title} siteName={siteName} siteDescription={siteDescription}>
+	<Avatar />
+	<Details />
+	<Socials />
+</Layout>
