@@ -9,9 +9,15 @@
 body{
   font-family: 'Jetbrains Mono', monospace;
   color: white;
-  background-color: black
+  background-color: black;
+  overflow:hidden;
 }
 a {
   /* Targets all unvisited links */
   color: #FF00FF; /* Bright Cyan/Electric Blue */
+}
+
+.embed-wrapper{
+  width: 60%;
+  height: 60%;
 }
