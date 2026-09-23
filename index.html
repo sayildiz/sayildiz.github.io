@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1>Samet Yildiz</h1>
+    <h1 id="name">Samet Yildiz</h1>
     <p>
       I'm <b>Samet</b>, a Backend Engineer in the automobile industry.
     </p>
@@ -18,10 +18,247 @@
       - In-browser video segmentation: cuts video from a start point into fixed-interval clips.
     </span>
 
-    <h1>My Keyboard Layout</h1>
-    <div class="embed-wrapper">
-      <div style="padding-top: 60%; position: relative;">
-        <iframe src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%"></iframe>
+    <details class="keyboard">
+      <summary>My Keyboard Layout</summary>
+      <div class="embed-wrapper">
+        <div style="padding-top: 60%; position: relative;">
+          <iframe src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%"></iframe>
+        </div>
       </div>
-    </div>
+    </details>
+
+    <canvas id="ascii"></canvas>
+    <script>
+      const c = document.getElementById('ascii'), x = c.getContext('2d');
+      const nameEl = document.getElementById('name');
+      const glyphs = ['(', ')', '{', '}', '~', ',', "'", '/', '\\', '·'];
+      let P = [], L = [], W, H;
+      let drag = null, pointer = { x: -999, y: -999 }, blockClick = false;
+      let anim = null;
+      let nameFont = '400 32px "Jetbrains Mono", monospace';
+
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const easeOutCubic = p => 1 - Math.pow(1 - p, 3);
+      const easeOutBounce = p => { const n = 7.5625, d = 2.75; if (p < 1 / d) return n * p * p; if (p < 2 / d) return n * (p -= 1.5 / d) * p + .75; if (p < 2.5 / d) return n * (p -= 2.25 / d) * p + .9375; return n * (p -= 2.625 / d) * p + .984375; };
+
+      function makePetal(y) {
+        const px = Math.random() * W;
+        return {
+          ox: px, x: px,
+          y: y === undefined ? Math.random() * H : y,
+          s: Math.random() < .7 ? 12 : 16,
+          fall: .15 + Math.random() * .35,
+          amp: 8 + Math.random() * 22,
+          phase: Math.random() * Math.PI * 2,
+          w: .4 + Math.random() * .5,
+          rot: Math.random() * Math.PI * 2,
+          spin: (Math.random() - .5) * .02,
+          vx: 0, vy: 0, thrown: false,
+          ch: glyphs[(Math.random() * glyphs.length) | 0],
+          a: .12 + Math.random() * .28
+        };
+      }
+
+      function nearestPetal(mx, my) {
+        let best = null, bd = 30 * 30;
+        for (const p of P) {
+          const dx = p.x - mx, dy = p.y - my, d = dx * dx + dy * dy;
+          if (d < bd) { bd = d; best = p; }
+        }
+        return best;
+      }
+
+      function makeLetter(ch, hx, hy) {
+        return {
+          ch, hx, hy, x: hx, y: hy, vx: 0, vy: 0, rot: 0, vr: 0,
+          scaleX: 1, scaleY: 1, alpha: 1, glow: 0, srot: 0,
+          held: false, thrown: false, depleted: false
+        };
+      }
+
+      function buildName() {
+        if (!nameEl) return;
+        const rect = nameEl.getBoundingClientRect();
+        const cs = getComputedStyle(nameEl);
+        nameFont = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        x.save();
+        x.font = nameFont;
+        x.textAlign = 'center';
+        x.textBaseline = 'middle';
+        const mid = rect.top + rect.height / 2;
+        let cx = rect.left;
+        L = [];
+        for (const ch of nameEl.textContent) {
+          const w = x.measureText(ch).width;
+          if (ch !== ' ') L.push(makeLetter(ch, cx + w / 2, mid));
+          cx += w;
+        }
+        x.restore();
+        nameEl.style.color = 'transparent';
+      }
+
+      function nearestLetter(mx, my) {
+        let best = null, bd = 34 * 34;
+        for (const l of L) {
+          if (l.depleted) continue;
+          const dx = l.x - mx, dy = l.y - my, d = dx * dx + dy * dy;
+          if (d < bd) { bd = d; best = l; }
+        }
+        return best;
+      }
+
+      function startReassembly() {
+        anim = { t0: performance.now(), dur: 850, stagger: 60 };
+        for (const l of L) {
+          l.depleted = false; l.held = false; l.thrown = false;
+          l.vx = 0; l.vy = 0; l.glow = 0; l.scaleX = 1; l.scaleY = 1; l.alpha = 0;
+          l.sx = Math.random() * W;
+          l.sy = -60 - Math.random() * 260;
+          l.srot = (Math.random() - .5) * 4;
+          l.ph = Math.random() * Math.PI * 2;
+        }
+      }
+
+      function updateLetter(l, i, now) {
+        const p = clamp((now - anim.t0 - i * anim.stagger) / anim.dur, 0, 1);
+        if (p <= 0) return;
+        l.x = lerp(l.sx, l.hx, easeOutCubic(p)) + Math.sin(p * 6 + l.ph) * 10 * (1 - p);
+        l.y = lerp(l.sy, l.hy, easeOutBounce(p));
+        l.rot = l.srot * (1 - p) + Math.sin(p * 8 + l.ph) * 0.5 * (1 - p);
+        l.scaleX = l.scaleY = 1;
+        l.alpha = Math.min(1, p * 4);
+      }
+
+      function resize() {
+        W = c.width = innerWidth; H = c.height = innerHeight;
+        drag = null; anim = null;
+        P = Array.from({ length: 55 }, () => makePetal());
+        buildName();
+      }
+
+      addEventListener('pointerdown', (e) => {
+        if (!anim) {
+          const l = nearestLetter(e.clientX, e.clientY);
+          if (l) { drag = l; l.held = true; l.thrown = false; }
+        }
+        if (!drag) {
+          const p = nearestPetal(e.clientX, e.clientY);
+          if (p) { drag = p; p.thrown = true; }
+        }
+        if (!drag) return;
+        pointer.x = e.clientX; pointer.y = e.clientY;
+        blockClick = true;
+        document.body.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+
+      addEventListener('pointermove', (e) => {
+        pointer.x = e.clientX; pointer.y = e.clientY;
+        if (!drag) {
+          const near = (!anim && nearestLetter(e.clientX, e.clientY)) || nearestPetal(e.clientX, e.clientY);
+          document.body.style.cursor = near ? 'grab' : '';
+        }
+      });
+
+      function release() {
+        if (drag) drag.thrown = true;
+        drag = null;
+        document.body.style.cursor = '';
+        setTimeout(() => blockClick = false, 0);
+      }
+      addEventListener('pointerup', release);
+      addEventListener('pointercancel', release);
+      addEventListener('blur', release);
+
+      addEventListener('click', (e) => {
+        if (blockClick) { e.preventDefault(); e.stopPropagation(); blockClick = false; }
+      }, true);
+
+      function draw(t) {
+        x.clearRect(0, 0, W, H);
+        x.textAlign = 'center';
+        x.textBaseline = 'middle';
+        const now = performance.now();
+
+        for (const p of P) {
+          if (p === drag) {
+            const dx = pointer.x - p.x, dy = pointer.y - p.y;
+            p.vx = dx * 0.4; p.vy = dy * 0.4;
+            p.x += p.vx; p.y += p.vy;
+            p.rot += p.vx * 0.01;
+          } else if (p.thrown) {
+            p.vy += 0.06;
+            p.vx *= 0.985; p.vy *= 0.985;
+            p.x += p.vx; p.y += p.vy;
+            p.rot += p.vx * 0.02;
+            if (p.x < 0) { p.x = 0; p.vx *= -0.5; }
+            if (p.x > W) { p.x = W; p.vx *= -0.5; }
+            if (Math.abs(p.vx) < 0.06 && Math.abs(p.vy) < 0.45) {
+              p.thrown = false; p.ox = p.x; p.vx = 0; p.vy = 0;
+            }
+          } else {
+            p.y += p.fall;
+            p.rot += p.spin;
+            p.x = p.ox + Math.sin(t / 1000 * p.w + p.phase) * p.amp;
+          }
+          if (p.y > H + 20) Object.assign(p, makePetal(-20));
+          x.save();
+          x.translate(p.x, p.y);
+          x.rotate(p.rot);
+          x.font = p.s + 'px "Jetbrains Mono", monospace';
+          x.fillStyle = `rgba(167,139,250,${p.a})`;
+          x.fillText(p.ch, 0, 0);
+          x.restore();
+        }
+
+        for (let i = 0; i < L.length; i++) {
+          const l = L[i];
+          if (l.depleted) continue;
+          if (l === drag) {
+            const dx = pointer.x - l.x, dy = pointer.y - l.y;
+            l.vx = dx * 0.4; l.vy = dy * 0.4;
+            l.x += l.vx; l.y += l.vy;
+          } else if (anim) {
+            updateLetter(l, i, now);
+          } else if (l.thrown) {
+            l.vy += 0.3;
+            l.x += l.vx; l.y += l.vy;
+            l.vx *= 0.99; l.vy *= 0.99;
+            l.rot += l.vx * 0.01;
+            if (l.x < -30 || l.x > W + 30 || l.y < -30 || l.y > H + 30) l.depleted = true;
+          } else {
+            l.vx += (l.hx - l.x) * 0.08;
+            l.vy += (l.hy - l.y) * 0.08;
+            l.vx *= 0.82; l.vy *= 0.82;
+            l.x += l.vx; l.y += l.vy;
+            l.rot += (0 - l.rot) * 0.1;
+            l.scaleX += (1 - l.scaleX) * 0.15;
+            l.scaleY += (1 - l.scaleY) * 0.15;
+            l.alpha += (1 - l.alpha) * 0.15;
+            l.glow *= 0.9;
+          }
+          x.save();
+          x.translate(l.x, l.y);
+          x.rotate(l.rot);
+          x.scale(l.scaleX, l.scaleY);
+          x.globalAlpha = clamp(l.alpha, 0, 1);
+          x.font = nameFont;
+          x.fillStyle = 'rgba(167,139,250,1)';
+          if (l.glow > 0.1) { x.shadowColor = 'rgba(167,139,250,0.9)'; x.shadowBlur = l.glow; }
+          x.fillText(l.ch, 0, 0);
+          x.restore();
+        }
+
+        if (anim && now - anim.t0 > anim.dur + L.length * anim.stagger + 100) anim = null;
+        if (!anim && L.length && !drag && L.every(l => l.depleted)) startReassembly();
+
+        requestAnimationFrame(draw);
+      }
+
+      addEventListener('resize', resize); resize();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildName);
+      requestAnimationFrame(draw);
+    </script>
   </body>
+</html>
