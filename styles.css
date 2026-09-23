@@ -6,15 +6,38 @@
   font-display: swap;
 }
 
+:root{
+  --accent: #a78bfa;
+  --accent-dim: #6d5bd0;
+}
+
 body{
   font-family: 'Jetbrains Mono', monospace;
-  color: white;
-  background-color: black;
+  color: #e5e5e5;
+  background-color: #0a0a0c;
   overflow:hidden;
 }
+
 a {
-  /* Targets all unvisited links */
-  color: #FF00FF; /* Bright Cyan/Electric Blue */
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: #fff;
+  text-shadow: 0 0 8px var(--accent);
+}
+
+h1 {
+  color: var(--accent);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+#ascii{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .embed-wrapper{

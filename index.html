@@ -24,4 +24,46 @@
         <iframe src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%"></iframe>
       </div>
     </div>
+
+    <canvas id="ascii"></canvas>
+    <script>
+      const c = document.getElementById('ascii'), x = c.getContext('2d');
+      const glyphs = ['·', '*', '+', '.', '`', ','];
+      let P = [], W, H;
+
+      function make(y) {
+        return {
+          x: Math.random() * W,
+          y: y === undefined ? Math.random() * H : y,
+          s: Math.random() < .7 ? 12 : 16,
+          fall: .15 + Math.random() * .35,
+          amp: 8 + Math.random() * 22,
+          phase: Math.random() * Math.PI * 2,
+          w: .4 + Math.random() * .5,
+          ch: glyphs[(Math.random() * glyphs.length) | 0],
+          a: .12 + Math.random() * .28
+        };
+      }
+
+      function resize() {
+        W = c.width = innerWidth; H = c.height = innerHeight;
+        P = Array.from({ length: 55 }, () => make());
+      }
+
+      function draw(t) {
+        x.clearRect(0, 0, W, H);
+        for (const p of P) {
+          p.y += p.fall;
+          const px = p.x + Math.sin(t / 1000 * p.w + p.phase) * p.amp;
+          if (p.y > H + 20) Object.assign(p, make(-20));
+          x.font = p.s + 'px "Jetbrains Mono", monospace';
+          x.fillStyle = `rgba(167,139,250,${p.a})`;
+          x.fillText(p.ch, px, p.y);
+        }
+        requestAnimationFrame(draw);
+      }
+
+      addEventListener('resize', resize); resize(); requestAnimationFrame(draw);
+    </script>
   </body>
+</html>
