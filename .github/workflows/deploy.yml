@@ -1,0 +1,67 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [boxcut-updated]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+
+      - name: Checkout boxcut
+        uses: actions/checkout@v4
+        with:
+          repository: sayildiz/boxcut
+          path: boxcut-src
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Build boxcut
+        working-directory: boxcut-src
+        run: |
+          bun install --frozen-lockfile
+          bun run build -- --base=./
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'boxcut-src' --exclude '_site' --exclude 'boxcut' ./ _site/
+          mkdir -p _site/boxcut
+          cp -R boxcut-src/dist/. _site/boxcut/
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
