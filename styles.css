@@ -33,6 +33,10 @@ h1 {
   letter-spacing: -0.02em;
 }
 
+#name{
+  user-select: none;
+}
+
 #ascii{
   position: fixed;
   inset: 0;
