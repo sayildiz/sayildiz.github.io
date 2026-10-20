@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>playground — Samet Yildiz</title>
+
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{
+        margin: 0;
+        padding: 1.2rem 1.2rem 2rem;
+      }
+      .back{
+        font-size: .9em;
+        color: #6b6b78;
+      }
+      .back:hover{
+        color: var(--accent);
+        text-shadow: none;
+      }
+      h1{
+        font-size: 2em;
+        margin: .8rem 0 .2rem;
+      }
+      .hint{
+        color: #8a8a97;
+        margin: .2rem 0 0;
+      }
+      .stage{
+        width: 100%;
+        max-width: 1000px;
+        margin: 1.2rem auto 0;
+        aspect-ratio: 1000 / 500;
+      }
+      #dance{
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      @media (max-width: 640px){
+        .stage{
+          aspect-ratio: 6 / 5;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="../">&larr; sametyildiz.dev</a>
+    <h1>playground</h1>
+    <p class="hint">SpongeBob and Patrick dancing in 3D.</p>
+
+    <div class="stage">
+      <canvas id="dance" role="img" aria-label="SpongeBob and Patrick dancing in 3D"></canvas>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./dance3d.js"></script>
+  </body>
+</html>

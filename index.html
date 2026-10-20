@@ -17,10 +17,11 @@
     <span>
       - In-browser video segmentation: cuts video from a start point into fixed-interval clips.
     </span>
-
-    <div class="stage">
-      <canvas id="dance" role="img" aria-label="SpongeBob and Patrick dancing"></canvas>
-    </div>
+    <br>
+    <a href="./playground/">playground</a>
+    <span>
+      - SpongeBob and Patrick dancing in 3D.
+    </span>
 
     <details class="keyboard">
       <summary>My Keyboard Layout</summary>
@@ -264,14 +265,5 @@
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildName);
       requestAnimationFrame(draw);
     </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
-        }
-      }
-    </script>
-    <script type="module" src="dance3d.js"></script>
   </body>
 </html>

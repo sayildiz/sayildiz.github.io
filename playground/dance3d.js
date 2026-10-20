@@ -185,10 +185,10 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
     }
 
     // arms
-    const armL = limb(torso, M.yellow, -0.8, 0.38, 0, 0.66, 0.1);
-    const armR = limb(torso, M.yellow, 0.8, 0.38, 0, 0.66, 0.1);
+    const armL = limb(torso, M.yellow, -0.8, 0.38, 0, 0.64, 0.115);
+    const armR = limb(torso, M.yellow, 0.8, 0.38, 0, 0.64, 0.115);
     for (const a of [armL, armR]) {
-      add(a.pivot, ball(0.115, 16), M.yellow, 0, -a.length - 0.02, 0);
+      add(a.pivot, ball(0.125, 16), M.yellow, 0, -a.length - 0.02, 0);
     }
 
     // legs
@@ -200,7 +200,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
         ring.rotation.x = Math.PI / 2;
         ring.castShadow = false;
       }
-      add(l.pivot, box(0.42, 0.17, 0.58, 0.07), M.black, 0, -0.86, 0.08);
+      add(l.pivot, box(0.46, 0.2, 0.62, 0.08), M.black, 0, -0.86, 0.09);
     }
 
     return { root, hips, torso, armL, armR, legL, legR, eyes };
@@ -253,19 +253,11 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
     // star body
     torso.add(extrude(starShape(1.14, 0.5, 1.05, 0.96), 0.58, M.pink));
 
-    // skin dots
-    for (const [dx, dy, dr] of [[-0.62, 0.5, 0.06], [-0.5, -0.1, 0.05], [0.66, 0.44, 0.055],
-      [0.72, -0.22, 0.05], [-0.22, 0.78, 0.04], [0.24, 0.84, 0.045], [0.1, -0.32, 0.04],
-      [-0.86, 0.12, 0.045], [0.86, 0.04, 0.04]]) {
-      const d = add(torso, disc(dr, 12), M.pinkDeep, dx, dy, 0.32);
-      d.castShadow = false;
-    }
-
     // shorts
-    add(torso, box(1.02, 0.52, 0.68, 0.12), M.green, 0, -0.48, 0);
-    add(torso, box(0.05, 0.46, 0.7, 0.02), M.green.clone(), 0, -0.48, 0.001).material.color.set(0x5c9c44);
-    drawFlower(torso, -0.28, -0.48, 0.352, 0.09);
-    drawFlower(torso, 0.28, -0.48, 0.352, 0.09);
+    add(torso, box(1.34, 0.56, 0.72, 0.16), M.green, 0, -0.44, 0);
+    add(torso, box(0.05, 0.5, 0.74, 0.02), M.green.clone(), 0, -0.44, 0.001).material.color.set(0x5c9c44);
+    drawFlower(torso, -0.33, -0.44, 0.372, 0.1);
+    drawFlower(torso, 0.33, -0.44, 0.372, 0.1);
 
     // face
     const eyes = [];
@@ -284,10 +276,11 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
     add(torso, box(0.14, 0.14, 0.03, 0.02), M.white, 0, -0.05, 0.355);
 
     // legs
-    const legL = limb(root, M.pink, -0.33, 1.22, 0, 0.96, 0.135);
-    const legR = limb(root, M.pink, 0.33, 1.22, 0, 0.96, 0.135);
+    const legL = limb(root, M.pink, -0.33, 1.36, 0, 1.12, 0.135);
+    const legR = limb(root, M.pink, 0.33, 1.36, 0, 1.12, 0.135);
     for (const l of [legL, legR]) {
-      const foot = add(l.pivot, ball(0.19, 16), M.pinkDeep, 0, -1.0, 0.06);
+      add(l.pivot, ball(0.145, 16), M.pink, 0, -0.02, 0);
+      const foot = add(l.pivot, ball(0.19, 16), M.pinkDeep, 0, -1.16, 0.06);
       foot.scale.set(1.15, 0.6, 1.5);
     }
 
