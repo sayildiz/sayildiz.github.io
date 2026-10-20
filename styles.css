@@ -83,7 +83,7 @@ h1 {
 #dance{
   display: block;
   width: 100%;
-  aspect-ratio: 820 / 380;
+  aspect-ratio: 820 / 420;
 }
 
 @media (max-width: 640px){
