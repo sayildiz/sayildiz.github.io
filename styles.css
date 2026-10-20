@@ -73,3 +73,21 @@ h1 {
   width: 60%;
   margin: .8rem 0 1.5rem;
 }
+
+.stage{
+  width: 100%;
+  max-width: 820px;
+  margin: 1.6rem auto 1rem;
+}
+
+#dance{
+  display: block;
+  width: 100%;
+  aspect-ratio: 820 / 380;
+}
+
+@media (max-width: 640px){
+  #dance{
+    aspect-ratio: 6 / 5;
+  }
+}
