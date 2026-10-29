@@ -28,40 +28,166 @@
         margin: .2rem 0 0;
       }
       .stage{
+        position: relative;
         width: 100%;
         max-width: 1000px;
         margin: 1.2rem auto 0;
         aspect-ratio: 1000 / 500;
+        overflow: hidden;
+        isolation: isolate;
       }
-      #dance{
+      .glow{
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(46% 62% at 50% 72%, rgba(167,139,250,.20), transparent 72%),
+          radial-gradient(30% 46% at 28% 80%, rgba(167,139,250,.34), transparent 70%),
+          radial-gradient(30% 46% at 72% 80%, rgba(96,165,250,.26), transparent 70%);
+        filter: blur(4px);
+        z-index: 0;
+      }
+      .floor{
+        position: absolute;
+        left: 5%;
+        right: 5%;
+        bottom: 3%;
+        height: 16%;
+        border-radius: 50%;
+        background:
+          radial-gradient(closest-side, rgba(167,139,250,.34), transparent 76%),
+          radial-gradient(60% 40% at 50% 62%, rgba(255,255,255,.06), transparent 80%);
+        z-index: 1;
+      }
+      .dancer{
+        position: absolute;
+        bottom: 7%;
+        height: 78%;
+        z-index: 2;
+        transform-origin: 50% 100%;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .dancer img{
         display: block;
-        width: 100%;
         height: 100%;
+        width: auto;
+        user-select: none;
+        -webkit-user-drag: none;
+        filter: drop-shadow(0 14px 12px rgba(0,0,0,.45));
+        animation: bob 1.0s ease-in-out infinite;
+      }
+      .dancer.sb{
+        left: 24%;
+        transform: translateX(-50%);
+      }
+      .dancer.pat{
+        left: 76%;
+        height: 86%;
+        transform: translateX(-50%);
+      }
+      .dancer.pat img{
+        animation-delay: -.5s;
+        /* Patrick is wider, nudge him a touch lower so feet line up */
+        animation-name: bobWide;
+      }
+      .shadow{
+        position: absolute;
+        bottom: -1%;
+        left: 50%;
+        width: 72%;
+        height: 10%;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(0,0,0,.62), transparent 76%);
+        transform: translateX(-50%);
+        z-index: -1;
+        animation: shade 1.0s ease-in-out infinite;
+      }
+      .dancer.pat .shadow{
+        animation-delay: -.5s;
+      }
+      @keyframes bob{
+        0%, 100% { transform: translateY(0) rotate(-2.5deg) scale(1, 1); }
+        25%      { transform: translateY(-5%) rotate(1.5deg) scale(1.02, .98); }
+        50%      { transform: translateY(0) rotate(2.5deg) scale(1, 1); }
+        75%      { transform: translateY(-5%) rotate(-1.5deg) scale(1.02, .98); }
+      }
+      @keyframes bobWide{
+        0%, 100% { transform: translateY(0) rotate(3deg) scale(1, 1); }
+        25%      { transform: translateY(-4.5%) rotate(-1.8deg) scale(1.025, .975); }
+        50%      { transform: translateY(0) rotate(-3deg) scale(1, 1); }
+        75%      { transform: translateY(-4.5%) rotate(1.8deg) scale(1.025, .975); }
+      }
+      @keyframes shade{
+        0%, 100% { transform: translateX(-50%) scale(1); opacity: .9; }
+        25%, 75% { transform: translateX(-50%) scale(.86); opacity: .6; }
+      }
+      @keyframes spin{
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      .dancer.spin img{
+        animation: spin .8s cubic-bezier(.3,.9,.3,1) 1;
+      }
+      .bubbles{
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 3;
+      }
+      .bubbles i{
+        position: absolute;
+        bottom: -8%;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 1px solid rgba(196,181,253,.5);
+        background: radial-gradient(circle at 32% 30%, rgba(255,255,255,.55), rgba(167,139,250,.06) 70%);
+        animation: rise linear forwards;
+      }
+      @keyframes rise{
+        from { transform: translate(0, 0) scale(.6); opacity: 0; }
+        12%  { opacity: .8; }
+        to   { transform: translate(var(--dx), -560px) scale(1.15); opacity: 0; }
       }
       @media (max-width: 640px){
         .stage{
           aspect-ratio: 6 / 5;
         }
+        .dancer{
+          height: 62%;
+        }
+        .dancer.sb{ left: 27%; }
+        .dancer.pat{ left: 73%; }
+      }
+      @media (prefers-reduced-motion: reduce){
+        .dancer img, .shadow, .bubbles i{ animation: none !important; }
       }
     </style>
   </head>
   <body>
     <a class="back" href="../">&larr; sametyildiz.dev</a>
     <h1>playground</h1>
-    <p class="hint">SpongeBob and Patrick dancing in 3D.</p>
+    <p class="hint">random stuff might be happening here</p>
 
-    <div class="stage">
-      <canvas id="dance" role="img" aria-label="SpongeBob and Patrick dancing in 3D"></canvas>
+    <!-- Character art: SpongeBob & Patrick (Nickelodeon), free transparent PNGs
+         from pngimg.com and pngall.com. -->
+    <div class="stage" id="stage">
+      <div class="glow"></div>
+      <div class="floor"></div>
+
+      <div class="dancer sb">
+        <img src="./assets/spongebob.png" alt="SpongeBob SquarePants" draggable="false">
+        <div class="shadow"></div>
+      </div>
+      <div class="dancer pat">
+        <img src="./assets/patrick.png" alt="Patrick Star" draggable="false">
+        <div class="shadow"></div>
+      </div>
+
+      <div class="bubbles" id="bubbles"></div>
     </div>
 
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
-        }
-      }
-    </script>
-    <script type="module" src="./dance3d.js"></script>
+    <script type="module" src="./dance.js"></script>
   </body>
 </html>
