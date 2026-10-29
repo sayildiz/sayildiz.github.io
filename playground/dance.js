@@ -1,4 +1,6 @@
-/* Playground: rigged SpongeBob from rigmodels.com, dancing a retargeted clip. */
+/* Playground: rigged SpongeBob & Patrick from rigmodels.com.
+   SpongeBob plays a human dance clip retargeted onto his skeleton;
+   Patrick (spine + legs only, no arm bones) bops along procedurally. */
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
@@ -23,7 +25,7 @@ if (bubbles && !still) {
   setInterval(spawn, 850);
 }
 
-/* the 3D dancer */
+/* the 3D dancers */
 if (canvas) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -36,20 +38,25 @@ if (canvas) {
 
   scene.add(new THREE.HemisphereLight(0xd8ccff, 0x241c33, 2.2));
 
-  const key = new THREE.DirectionalLight(0xfff6e8, 2.4);
+  const key = new THREE.DirectionalLight(0xfff6e8, 2.5);
   key.position.set(2.5, 4, 4);
   scene.add(key);
 
-  const rim = new THREE.DirectionalLight(0xa78bfa, 1.6);
+  const rim = new THREE.DirectionalLight(0xa78bfa, 1.7);
   rim.position.set(-3.5, 2.2, -3);
   scene.add(rim);
 
-  const fill = new THREE.PointLight(0xffffff, 10, 12, 2);
-  fill.position.set(0, 1.2, 3);
+  const fill = new THREE.PointLight(0xffffff, 9, 14, 2);
+  fill.position.set(0, 1.4, 3);
   scene.add(fill);
 
-  const MODEL_H = 1.85;          // world height of the dancer
+  const SB_H = 1.85;          // SpongeBob's height in world units
+  const PAT_H = 1.74;
+  const SPACING = 0.62;
+
   let mixer = null;
+  let sponge = null;
+  let patrick = null;
 
   const bonesOf = (root) => {
     const map = new Map();
@@ -57,14 +64,32 @@ if (canvas) {
     return map;
   };
 
+  /* scale to `height`, centre on x/z, stand the feet on y = 0 */
+  function normalize(model, height) {
+    const box = new THREE.Box3().setFromObject(model);
+    const size = box.getSize(new THREE.Vector3());
+    const s = height / size.y;
+    model.scale.setScalar(s);
+    model.position.set(
+      -(box.min.x + size.x / 2) * s,
+      -box.min.y * s,
+      -(box.min.z + size.z / 2) * s,
+    );
+    const holder = new THREE.Group();
+    holder.add(model);
+    return holder;
+  }
+
   const loader = new FBXLoader();
   Promise.all([
     new Promise((ok, no) => loader.load('./assets/spongebob.fbx', ok, undefined, no)),
+    new Promise((ok, no) => loader.load('./assets/patrick.fbx', ok, undefined, no)),
     new Promise((ok, no) => loader.load('./assets/dance.fbx', ok, undefined, no)),
-  ]).then(([model, clipSource]) => {
-    /* rigmodels' own retarget: close the rest-orientation gap between the
-       model's skeleton and the clip's skeleton, bone by bone. */
-    const modelBones = bonesOf(model);
+  ]).then(([sb, pat, clipSource]) => {
+    /* --- SpongeBob: retarget the dance clip --- */
+    /* rigmodels' own fix for the rest-orientation gap between the model's
+       skeleton and the clip's skeleton, bone by bone. */
+    const modelBones = bonesOf(sb);
     const clipBones = bonesOf(clipSource);
     const delta = new Map();
     for (const [name, bone] of modelBones) {
@@ -84,30 +109,30 @@ if (canvas) {
       }
     }
 
-    /* the FBX is in centimetres and off-centre: normalise it */
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    model.scale.setScalar(MODEL_H / size.y);
-    model.position.set(
-      -(box.min.x + size.x / 2) * (MODEL_H / size.y),
-      -box.min.y * (MODEL_H / size.y),
-      -(box.min.z + size.z / 2) * (MODEL_H / size.y),
-    );
-    scene.add(model);
+    sponge = normalize(sb, SB_H);
+    sponge.position.x = -SPACING;
+    scene.add(sponge);
 
-    mixer = new THREE.AnimationMixer(model);
+    mixer = new THREE.AnimationMixer(sb);
     const action = mixer.clipAction(clip);
     action.play();
     if (still) {
       action.paused = true;
-      action.time = 0.35;
+      action.time = 1.6;
       mixer.update(0);
     }
+
+    /* --- Patrick: no arm bones in his rig, so he keeps the beat instead --- */
+    patrick = normalize(pat, PAT_H);
+    patrick.position.x = SPACING;
+    patrick.rotation.y = 0;
+    scene.add(patrick);
+
     resize();
   }).catch((err) => {
     console.error(err);
     const note = document.querySelector('.hint');
-    if (note) note.textContent = 'the dancer did not show up.';
+    if (note) note.textContent = 'the dancers did not show up.';
   });
 
   function resize() {
@@ -116,11 +141,11 @@ if (canvas) {
     renderer.setSize(r.width, r.height, false);
     camera.aspect = r.width / r.height;
     const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
-    /* fit a 2.25-unit-tall box, widening the shot on portrait screens */
-    const fitH = 2.25, fitW = 2.6;
+    /* fit both dancers, widening the shot on portrait screens */
+    const fitH = 2.4, fitW = 3.3;
     const dist = Math.max(fitH, fitW / camera.aspect) / (2 * Math.tan(halfFov));
-    camera.position.set(0, MODEL_H * 0.52, dist);
-    camera.lookAt(0, MODEL_H * 0.5, 0);
+    camera.position.set(0, SB_H * 0.55, dist);
+    camera.lookAt(0, SB_H * 0.5, 0);
     camera.updateProjectionMatrix();
     render();
   }
@@ -132,6 +157,14 @@ if (canvas) {
   const clock = new THREE.Clock();
   function loop() {
     if (mixer) mixer.update(clock.getDelta());
+    if (patrick) {
+      const t = clock.elapsedTime;
+      const beat = Math.sin(t * Math.PI * 2 / 1.0);
+      patrick.position.y = Math.abs(beat) * 0.05;
+      patrick.rotation.z = beat * 0.09;
+      patrick.rotation.y = Math.sin(t * 0.9) * 0.2;
+      patrick.scale.y = 1 + beat * 0.02;
+    }
     render();
     requestAnimationFrame(loop);
   }

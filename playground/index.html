@@ -30,9 +30,9 @@
       .stage{
         position: relative;
         width: 100%;
-        max-width: 760px;
-        margin: 1rem auto 0;
-        aspect-ratio: 1 / 1;
+        max-width: 900px;
+        margin: 1.2rem auto 0;
+        aspect-ratio: 1000 / 560;
         isolation: isolate;
       }
       .glow{
@@ -86,7 +86,7 @@
       }
       @media (max-width: 640px){
         .stage{
-          aspect-ratio: 4 / 5;
+          aspect-ratio: 5 / 5;
         }
       }
       @media (prefers-reduced-motion: reduce){
@@ -99,8 +99,9 @@
     <h1>playground</h1>
     <p class="hint">random stuff might be happening here</p>
 
-    <!-- Rigged SpongeBob model from rigmodels.com, dance clip retargeted
-         onto its skeleton at load time. -->
+    <!-- Rigged SpongeBob and Patrick models from rigmodels.com. SpongeBob
+         plays a human dance clip retargeted onto his skeleton at load time;
+         Patrick's rig has no arm bones, so he keeps the beat instead. -->
     <div class="stage" id="stage">
       <div class="glow"></div>
       <div class="floor"></div>
