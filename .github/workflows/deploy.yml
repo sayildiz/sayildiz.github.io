@@ -34,6 +34,7 @@ jobs:
         with:
           repository: sayildiz/caffeine-tracker
           path: caffeine-src
+          token: ${{ secrets.SITE_DISPATCH_TOKEN }}
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
