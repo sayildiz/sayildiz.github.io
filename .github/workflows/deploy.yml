@@ -34,7 +34,6 @@ jobs:
         with:
           repository: sayildiz/caffeine-tracker
           path: caffeine-src
-          ssh-key: ${{ secrets.CAFFEINE_DEPLOY_KEY }}
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
