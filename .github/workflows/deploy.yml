@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   repository_dispatch:
-    types: [boxcut-updated]
+    types: [boxcut-updated, caffeine-updated]
 
 permissions:
   contents: read
@@ -29,6 +29,12 @@ jobs:
           repository: sayildiz/boxcut
           path: boxcut-src
 
+      - name: Checkout caffeine
+        uses: actions/checkout@v4
+        with:
+          repository: sayildiz/caffeine-tracker
+          path: caffeine-src
+
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -40,12 +46,20 @@ jobs:
           bun install --frozen-lockfile
           bun run build -- --base=./
 
+      - name: Build caffeine
+        working-directory: caffeine-src
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+
       - name: Assemble site
         run: |
           mkdir -p _site
-          rsync -a --exclude '.git' --exclude '.github' --exclude 'boxcut-src' --exclude '_site' --exclude 'boxcut' ./ _site/
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'boxcut-src' --exclude '_site' --exclude 'boxcut' --exclude 'caffeine-src' --exclude 'caffeine' ./ _site/
           mkdir -p _site/boxcut
           cp -R boxcut-src/dist/. _site/boxcut/
+          mkdir -p _site/caffeine
+          cp -R caffeine-src/dist/. _site/caffeine/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
