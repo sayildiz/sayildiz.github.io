@@ -8,6 +8,18 @@ const canvas = document.getElementById('dance');
 const bubbles = document.getElementById('bubbles');
 const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* loading / failure notice, so the stage is never just an empty box */
+const note = document.getElementById('loading');
+let ready = false;
+const showNote = (text) => {
+  if (!note) return;
+  note.textContent = text;
+  note.hidden = false;
+};
+window.addEventListener('error', () => {
+  if (!ready) showNote('the dancers did not show up.');
+});
+
 /* bubbles drifting up from the stage floor */
 if (bubbles && !still) {
   const spawn = () => {
@@ -128,11 +140,12 @@ if (canvas) {
     patrick.rotation.y = 0;
     scene.add(patrick);
 
+    ready = true;
+    if (note) note.hidden = true;
     resize();
   }).catch((err) => {
     console.error(err);
-    const note = document.querySelector('.hint');
-    if (note) note.textContent = 'the dancers did not show up.';
+    showNote('the dancers did not show up.');
   });
 
   function resize() {

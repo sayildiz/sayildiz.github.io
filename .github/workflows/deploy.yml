@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -55,7 +55,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
-          rsync -a --exclude '.git' --exclude '.github' --exclude 'boxcut-src' --exclude '_site' --exclude 'boxcut' --exclude 'caffeine-src' --exclude 'caffeine' ./ _site/
+          rsync -a --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude 'README.md' --exclude 'boxcut-src' --exclude '_site' --exclude 'boxcut' --exclude 'caffeine-src' --exclude 'caffeine' ./ _site/
           mkdir -p _site/boxcut
           cp -R boxcut-src/dist/. _site/boxcut/
           mkdir -p _site/caffeine

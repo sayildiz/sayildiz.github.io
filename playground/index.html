@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>playground — Samet Yildiz</title>
+    <meta name="description" content="A 3D SpongeBob and Patrick dance scene rendered with Three.js.">
+    <link rel="canonical" href="https://sametyildiz.dev/playground/">
+    <meta name="theme-color" content="#0a0a0c">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="../styles.css">
     <style>
       body{
@@ -13,7 +18,7 @@
       }
       .back{
         font-size: .9em;
-        color: #6b6b78;
+        color: #8a8a97;
       }
       .back:hover{
         color: var(--accent);
@@ -62,6 +67,28 @@
         height: 100%;
         z-index: 2;
       }
+      .loading{
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        margin: 0;
+        padding: 0 1.5rem;
+        text-align: center;
+        color: #8a8a97;
+        font-size: .9rem;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .loading[hidden]{
+        display: none;
+      }
+      .no-js{
+        color: #8a8a97;
+        font-size: .9rem;
+        text-align: center;
+        margin: 1rem 0 0;
+      }
       .bubbles{
         position: absolute;
         inset: 0;
@@ -107,7 +134,11 @@
       <div class="floor"></div>
       <canvas id="dance" role="img" aria-label="SpongeBob SquarePants dancing in 3D"></canvas>
       <div class="bubbles" id="bubbles"></div>
+      <p class="loading" id="loading" role="status">loading the dancers…</p>
     </div>
+    <noscript>
+      <p class="no-js">the playground needs JavaScript and WebGL to draw the dancers.</p>
+    </noscript>
 
     <script type="importmap">
       {

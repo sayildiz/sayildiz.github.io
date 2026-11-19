@@ -1,43 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Samet Yildiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Samet Yildiz — Backend Engineer</title>
+    <meta name="description" content="Samet Yildiz, a backend engineer in the automobile industry. Small browser tools and experiments: boxcut, caffeine tracker, and a 3D playground.">
+    <link rel="canonical" href="https://sametyildiz.dev/">
+    <meta name="theme-color" content="#0a0a0c">
+    <meta name="color-scheme" content="dark">
 
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samet Yildiz">
+    <meta property="og:title" content="Samet Yildiz — Backend Engineer">
+    <meta property="og:description" content="Small browser tools and experiments: boxcut, caffeine tracker, and a 3D playground.">
+    <meta property="og:url" content="https://sametyildiz.dev/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Samet Yildiz — Backend Engineer">
+    <meta name="twitter:description" content="Small browser tools and experiments: boxcut, caffeine tracker, and a 3D playground.">
+
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="./fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Samet Yildiz",
+        "url": "https://sametyildiz.dev/",
+        "jobTitle": "Backend Engineer",
+        "sameAs": ["https://github.com/sayildiz"],
+        "description": "Backend engineer in the automobile industry who builds small browser tools and experiments."
+      }
+    </script>
   </head>
   <body>
-    <h1 id="name">Samet Yildiz</h1>
-    <p>
-      I'm <b>Samet</b>, a Backend Engineer in the automobile industry.
-    </p>
+    <main class="wrap">
+      <header class="intro">
+        <h1 id="name">Samet Yildiz</h1>
+        <p class="tagline">
+          I'm <b>Samet</b>, a Backend Engineer in the automobile industry.
+        </p>
+        <nav class="contact" aria-label="Contact">
+          <a href="https://github.com/sayildiz" target="_blank" rel="me noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M24 12c0-6.63-5.37-12-12-12S0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.73.08-.73 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.83 1.32 3.52 1.01.11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.7.82.58A12 12 0 0 0 24 12Z"/>
+            </svg>
+            GitHub
+          </a>
+          <a href="mailto:contact@sametyildiz.dev">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2.5"/>
+              <path d="m4 7.5 8 5.5 8-5.5"/>
+            </svg>
+            contact@sametyildiz.dev
+          </a>
+        </nav>
+      </header>
 
-    <h1>Other Links</h1>
-    <a href="./boxcut/">boxcut</a>
-    <span>
-      - In-browser video segmentation: cuts video from a start point into fixed-interval clips.
-    </span>
-    <br>
-    <a href="./caffeine/">caffeine</a>
-    <span>
-      - Real-time caffeine tracker: drink presets, exponential decay, live decay curve. No backend.
-    </span>
-    <br>
-    <a href="./playground/">playground</a>
-    <span>
-      - Random stuff might be happening here.
-    </span>
+      <h2>Other Links</h2>
+      <ul class="links">
+        <li>
+          <a href="./boxcut/">boxcut</a>
+          <span>In-browser video segmentation: cuts video from a start point into fixed-interval clips.</span>
+        </li>
+        <li>
+          <a href="./caffeine/">caffeine</a>
+          <span>Real-time caffeine tracker: drink presets, exponential decay, live decay curve. No backend.</span>
+        </li>
+        <li>
+          <a href="./playground/">playground</a>
+          <span>Random stuff might be happening here.</span>
+        </li>
+      </ul>
 
-    <details class="keyboard">
-      <summary>My Keyboard Layout</summary>
-      <div class="embed-wrapper">
-        <div style="padding-top: 60%; position: relative;">
-          <iframe src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0" style="border: 0; height: 100%; left: 0; position: absolute; top: 0; width: 100%"></iframe>
+      <details class="keyboard" id="keyboard">
+        <summary>My Keyboard Layout</summary>
+        <div class="embed-wrapper">
+          <div class="ratio" id="keyboard-ratio">
+            <iframe
+              id="keyboard-embed"
+              data-src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0"
+              title="Samet's Moonlander keyboard layout"></iframe>
+          </div>
         </div>
-      </div>
-    </details>
+        <p class="embed-link">
+          <a href="https://configure.zsa.io/moonlander/layouts/WGZjy/latest/0" target="_blank" rel="noopener noreferrer">Open the full layout in Oryx&nbsp;&nearr;</a>
+        </p>
+        <noscript>
+          <div class="embed-wrapper">
+            <div class="ratio">
+              <iframe class="plain" src="https://configure.zsa.io/embed/moonlander/layouts/WGZjy/latest/0" title="Samet's Moonlander keyboard layout" loading="lazy"></iframe>
+            </div>
+          </div>
+        </noscript>
+      </details>
+    </main>
 
-    <canvas id="ascii"></canvas>
+    <canvas id="ascii" aria-hidden="true"></canvas>
+
+    <div class="name-menu" id="name-menu" role="menu" aria-label="Name actions" hidden>
+      <button type="button" role="menuitem" id="copy-name">Copy name</button>
+    </div>
+    <p class="sr-only" id="copy-status" role="status" aria-live="polite"></p>
+
     <script>
       const c = document.getElementById('ascii'), x = c.getContext('2d');
       const nameEl = document.getElementById('name');
@@ -46,6 +112,8 @@
       let drag = null, pointer = { x: -999, y: -999 }, blockClick = false;
       let anim = null;
       let nameFont = '400 32px "Jetbrains Mono", monospace';
+      let lastScroll = window.scrollY;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
       const lerp = (a, b, t) => a + (b - a) * t;
@@ -58,12 +126,12 @@
           ox: px, x: px,
           y: y === undefined ? Math.random() * H : y,
           s: Math.random() < .7 ? 12 : 16,
-          fall: .15 + Math.random() * .35,
-          amp: 8 + Math.random() * 22,
+          fall: reduced ? 0 : .15 + Math.random() * .35,
+          amp: reduced ? 0 : 8 + Math.random() * 22,
           phase: Math.random() * Math.PI * 2,
-          w: .4 + Math.random() * .5,
+          w: reduced ? 0 : .4 + Math.random() * .5,
           rot: Math.random() * Math.PI * 2,
-          spin: (Math.random() - .5) * .02,
+          spin: reduced ? 0 : (Math.random() - .5) * .02,
           vx: 0, vy: 0, thrown: false,
           ch: glyphs[(Math.random() * glyphs.length) | 0],
           a: .12 + Math.random() * .28
@@ -96,7 +164,8 @@
         x.font = nameFont;
         x.textAlign = 'center';
         x.textBaseline = 'middle';
-        const mid = rect.top + rect.height / 2;
+        /* homes are kept in document coordinates; draw() converts to viewport */
+        const mid = rect.top + window.scrollY + rect.height / 2;
         let cx = rect.left;
         L = [];
         for (const ch of nameEl.textContent) {
@@ -104,7 +173,9 @@
           if (ch !== ' ') L.push(makeLetter(ch, cx + w / 2, mid));
           cx += w;
         }
+        for (const l of L) l.y -= window.scrollY;
         x.restore();
+        lastScroll = window.scrollY;
         nameEl.style.color = 'transparent';
       }
 
@@ -119,6 +190,15 @@
       }
 
       function startReassembly() {
+        if (reduced) {
+          for (const l of L) {
+            l.depleted = false; l.held = false; l.thrown = false;
+            l.vx = 0; l.vy = 0; l.glow = 0; l.rot = 0;
+            l.x = l.hx; l.y = l.hy - window.scrollY; l.alpha = 1;
+          }
+          anim = null;
+          return;
+        }
         anim = { t0: performance.now(), dur: 850, stagger: 60 };
         for (const l of L) {
           l.depleted = false; l.held = false; l.thrown = false;
@@ -130,24 +210,34 @@
         }
       }
 
-      function updateLetter(l, i, now) {
+      function updateLetter(l, i, now, sy) {
         const p = clamp((now - anim.t0 - i * anim.stagger) / anim.dur, 0, 1);
         if (p <= 0) return;
         l.x = lerp(l.sx, l.hx, easeOutCubic(p)) + Math.sin(p * 6 + l.ph) * 10 * (1 - p);
-        l.y = lerp(l.sy, l.hy, easeOutBounce(p));
+        l.y = lerp(l.sy, l.hy - sy, easeOutBounce(p));
         l.rot = l.srot * (1 - p) + Math.sin(p * 8 + l.ph) * 0.5 * (1 - p);
         l.scaleX = l.scaleY = 1;
         l.alpha = Math.min(1, p * 4);
       }
 
       function resize() {
-        W = c.width = innerWidth; H = c.height = innerHeight;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth; H = window.innerHeight;
+        c.width = Math.round(W * dpr);
+        c.height = Math.round(H * dpr);
+        c.style.width = W + 'px';
+        c.style.height = H + 'px';
+        x.setTransform(dpr, 0, 0, dpr, 0, 0);
         drag = null; anim = null;
-        P = Array.from({ length: 55 }, () => makePetal());
+        P = Array.from({ length: reduced ? 18 : 55 }, () => makePetal());
         buildName();
+        fitKeyboard();
       }
 
       addEventListener('pointerdown', (e) => {
+        /* never let the drifting glyphs swallow clicks on links or controls */
+        if (e.target.closest && e.target.closest('a, summary, button, iframe, input, select, textarea, label, .name-menu')) return;
+        if (e.button !== 0 || e.ctrlKey) return;
         if (!anim) {
           const l = nearestLetter(e.clientX, e.clientY);
           if (l) { drag = l; l.held = true; l.thrown = false; }
@@ -166,7 +256,8 @@
       addEventListener('pointermove', (e) => {
         pointer.x = e.clientX; pointer.y = e.clientY;
         if (!drag) {
-          const near = (!anim && nearestLetter(e.clientX, e.clientY)) || nearestPetal(e.clientX, e.clientY);
+          const ui = e.target.closest && e.target.closest('a, summary, button, iframe');
+          const near = !ui && ((!anim && nearestLetter(e.clientX, e.clientY)) || nearestPetal(e.clientX, e.clientY));
           document.body.style.cursor = near ? 'grab' : '';
         }
       });
@@ -186,10 +277,16 @@
       }, true);
 
       function draw(t) {
+        const now = performance.now();
+        const sy = window.scrollY;
+        if (sy !== lastScroll) {
+          const d = lastScroll - sy;
+          for (const l of L) if (l !== drag) l.y += d;
+          lastScroll = sy;
+        }
         x.clearRect(0, 0, W, H);
         x.textAlign = 'center';
         x.textBaseline = 'middle';
-        const now = performance.now();
 
         for (const p of P) {
           if (p === drag) {
@@ -230,7 +327,7 @@
             l.vx = dx * 0.4; l.vy = dy * 0.4;
             l.x += l.vx; l.y += l.vy;
           } else if (anim) {
-            updateLetter(l, i, now);
+            updateLetter(l, i, now, sy);
           } else if (l.thrown) {
             l.vy += 0.3;
             l.x += l.vx; l.y += l.vy;
@@ -239,7 +336,7 @@
             if (l.x < -30 || l.x > W + 30 || l.y < -30 || l.y > H + 30) l.depleted = true;
           } else {
             l.vx += (l.hx - l.x) * 0.08;
-            l.vy += (l.hy - l.y) * 0.08;
+            l.vy += (l.hy - sy - l.y) * 0.08;
             l.vx *= 0.82; l.vy *= 0.82;
             l.x += l.vx; l.y += l.vy;
             l.rot += (0 - l.rot) * 0.1;
@@ -265,6 +362,100 @@
 
         requestAnimationFrame(draw);
       }
+
+      /* defer the third-party keyboard iframe until the section is opened */
+      const kb = document.getElementById('keyboard');
+      const kbFrame = document.getElementById('keyboard-embed');
+      const kbRatio = document.getElementById('keyboard-ratio');
+
+      /* Oryx only renders the real layout above ~740px, so keep the iframe's
+         internal viewport at 900px and scale the result down to fit. */
+      function fitKeyboard() {
+        if (!kbRatio || !kbFrame) return;
+        const w = kbRatio.clientWidth;
+        if (!w) return;
+        kbFrame.style.setProperty('--kb-scale', String(Math.min(1, w / 900)));
+      }
+
+      const loadKeyboard = () => {
+        if (kbFrame && !kbFrame.getAttribute('src')) kbFrame.src = kbFrame.dataset.src;
+      };
+      if (kb) {
+        if (kb.open) loadKeyboard();
+        kb.addEventListener('toggle', () => {
+          if (!kb.open) return;
+          loadKeyboard();
+          fitKeyboard();
+          requestAnimationFrame(fitKeyboard);
+        });
+      }
+
+      /* right-click on the name to copy it */
+      const nameMenu = document.getElementById('name-menu');
+      const copyNameBtn = document.getElementById('copy-name');
+      const copyStatus = document.getElementById('copy-status');
+      const fullName = (nameEl.textContent || '').trim().replace(/\s+/g, ' ');
+      let copyTimer = 0;
+
+      function closeNameMenu() {
+        nameMenu.hidden = true;
+        clearTimeout(copyTimer);
+      }
+
+      function openNameMenu(x, y) {
+        clearTimeout(copyTimer);
+        copyNameBtn.textContent = 'Copy name';
+        nameMenu.style.left = '0px';
+        nameMenu.style.top = '0px';
+        nameMenu.hidden = false;
+        const box = nameMenu.getBoundingClientRect();
+        const pad = 8;
+        nameMenu.style.left = `${Math.max(pad, Math.min(x, window.innerWidth - box.width - pad))}px`;
+        nameMenu.style.top = `${Math.max(pad, Math.min(y, window.innerHeight - box.height - pad))}px`;
+        copyNameBtn.focus({ preventScroll: true });
+      }
+
+      async function copyFullName() {
+        try {
+          await navigator.clipboard.writeText(fullName);
+        } catch (err) {
+          /* fallback for browsers without the async clipboard API */
+          const field = document.createElement('textarea');
+          field.value = fullName;
+          field.setAttribute('readonly', '');
+          field.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+          document.body.appendChild(field);
+          field.select();
+          const ok = document.execCommand('copy');
+          field.remove();
+          if (!ok) {
+            copyNameBtn.textContent = 'Copy failed';
+            copyStatus.textContent = 'Could not copy the name.';
+            return;
+          }
+        }
+        copyNameBtn.textContent = 'Copied!';
+        copyStatus.textContent = `${fullName} copied to clipboard.`;
+        copyTimer = setTimeout(closeNameMenu, 900);
+      }
+
+      addEventListener('contextmenu', (e) => {
+        if (e.target.closest && e.target.closest('a, summary, button, iframe, input, select, textarea, label, .name-menu')) return;
+        const onName = (e.target.closest && e.target.closest('#name')) || nearestLetter(e.clientX, e.clientY);
+        if (!onName) return;
+        e.preventDefault();
+        openNameMenu(e.clientX, e.clientY);
+      });
+
+      copyNameBtn.addEventListener('click', copyFullName);
+      addEventListener('pointerdown', (e) => {
+        if (!nameMenu.hidden && !nameMenu.contains(e.target)) closeNameMenu();
+      }, true);
+      addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !nameMenu.hidden) closeNameMenu();
+      });
+      addEventListener('scroll', closeNameMenu, { passive: true });
+      addEventListener('resize', closeNameMenu);
 
       addEventListener('resize', resize); resize();
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildName);
